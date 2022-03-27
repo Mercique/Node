@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const readline = require("readline");
 const inquirer = require("inquirer");
+const colors = require("colors");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -12,12 +13,12 @@ const rl = readline.createInterface({
 const question = (query) =>
   new Promise((resolve) => rl.question(query, resolve));
 
-const main = async () => {
+(async () => {
   const filePath = await question("Введите путь до файла: ");
   const checkPath = filePath === "" ? "./" : filePath;
   const fileList = fs.readdirSync(checkPath);
   showFiles(fileList, checkPath);
-};
+})();
 
 const checkFiles = (path) => {
   if (fs.lstatSync(path).isFile()) return true;
@@ -39,12 +40,10 @@ const showFiles = (fileList, checkPath) => {
 
       if (checkFiles(fullPath)) {
         const data = fs.readFileSync(fullPath, "utf-8");
-        console.log(data);
+        console.log(colors.yellow(data));
       } else {
         const directoryList = fs.readdirSync(fullPath);
         showFiles(directoryList, fullPath);
       }
     });
 };
-
-main();
