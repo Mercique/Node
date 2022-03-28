@@ -15,9 +15,10 @@ const question = (query) =>
 
 (async () => {
   const filePath = await question("Введите путь до файла: ");
+  const fileSearchText = await question("Введите искомый текст: ");
   const checkPath = filePath === "" ? "./" : filePath;
   const fileList = fs.readdirSync(checkPath);
-  showFiles(fileList, checkPath);
+  showFiles(fileList, checkPath, fileSearchText);
 })();
 
 const checkFiles = (path) => {
@@ -25,25 +26,40 @@ const checkFiles = (path) => {
   return false;
 };
 
-const showFiles = (fileList, checkPath) => {
+const searchText = (file, text) => {
+  let count = 0;
+  if (file.includes(text) && text.length != 0) {
+    const regExp = new RegExp(text, "g");
+    console.log(
+      file.replace(regExp, () => {
+        count++;
+        return colors.green(text);
+      })
+    );
+  } else {
+    console.log(file);
+  }
+  console.log(colors.yellow(`Найдено искомых значений в файле: ${count}`));
+};
+
+const showFiles = (fileList, checkPath, fileSearchText) => {
   inquirer
     .prompt([
       {
         name: "fileName",
         type: "list",
-        message: "Выберите файл:",
+        message: "Выберите файл/директорию:",
         choices: fileList,
       },
     ])
     .then(({ fileName }) => {
       const fullPath = path.join(checkPath, fileName);
-
       if (checkFiles(fullPath)) {
         const data = fs.readFileSync(fullPath, "utf-8");
-        console.log(colors.yellow(data));
+        searchText(data, fileSearchText);
       } else {
         const directoryList = fs.readdirSync(fullPath);
-        showFiles(directoryList, fullPath);
+        showFiles(directoryList, fullPath, fileSearchText);
       }
     });
 };
