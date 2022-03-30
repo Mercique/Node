@@ -4,11 +4,11 @@
   "description": "Node.js course",
   "main": "index.js",
   "scripts": {
-    "cli": "node cli.js",
+    "cli": "node lesson4/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "reader": "cli.js"
+    "reader": "lesson4/cli.js"
   },
   "repository": {
     "type": "git",
