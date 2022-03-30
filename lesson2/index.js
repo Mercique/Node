@@ -47,10 +47,8 @@ const runTimer = () => {
   let timer = setInterval(() => {
     const curDate = new Date();
     const { type, text } = getDiffDate(setDate, curDate);
-
-    emitter.emit(type, text);
-
     if (type !== "timer") clearInterval(timer);
+    emitter.emit(type, text);
   }, 1000);
 };
 
