@@ -28,7 +28,7 @@ const getDiffDate = (set, cur) => {
   if (isNaN(diff)) {
     return {
       type: "nan",
-      text: "Ошибка ввода! Введите по образцу: `DD-MM-YYYY HH:MM:SS`",
+      text: "Ошибка ввода! Введите по образцу: `DD.MM.YYYY HH:MM:SS`",
     };
   }
 
@@ -43,19 +43,15 @@ const getDiffDate = (set, cur) => {
   };
 };
 
-const runTimer = async () => {
-  const curDate = new Date();
-  const { type, text } = getDiffDate(setDate, curDate);
-  let timer;
+const runTimer = () => {
+  let timer = setInterval(() => {
+    const curDate = new Date();
+    const { type, text } = getDiffDate(setDate, curDate);
 
-  emitter.emit(type, text);
+    emitter.emit(type, text);
 
-  if (type !== "timer") {
-    return clearTimeout(timer);
-  }
-
-  await new Promise((resolve) => (timer = setTimeout(resolve, 1000)));
-  await runTimer();
+    if (type !== "timer") clearInterval(timer);
+  }, 1000);
 };
 
 class Handler {
