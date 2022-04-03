@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+      integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <input id="input" type="text" autofocus />
+    <button id="button">Send</button>
+    <div id="messages"></div>
+    <script>
+      const socket = io("localhost:5555");
+
+      const messageBlock = document.querySelector("#messages");
+      const button = document.querySelector("#button");
+      const input = document.querySelector("#input");
+
+      socket.on("connect", () => {
+        console.log("Connected!");
+      });
+
+      socket.on("server-message", (data) => {
+        messageBlock.insertAdjacentHTML(
+          "beforeend",
+          `<div>${data.message}</div>`
+        );
+      });
+
+      button.addEventListener("click", () => {
+        const data = {
+          message: input.value,
+        };
+
+        socket.emit("client-msg", data);
+      });
+    </script>
+  </body>
+</html>
