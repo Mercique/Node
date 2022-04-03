@@ -21,10 +21,7 @@ const question = (query) =>
   showFiles(fileList, checkPath, fileSearchText);
 })();
 
-const checkFiles = (path) => {
-  if (fs.lstatSync(path).isFile()) return true;
-  return false;
-};
+const isFile = (path) => fs.lstatSync(path).isFile();
 
 const searchText = (file, text) => {
   let count = 0;
@@ -54,7 +51,7 @@ const showFiles = (fileList, checkPath, fileSearchText) => {
     ])
     .then(({ fileName }) => {
       const fullPath = path.join(checkPath, fileName);
-      if (checkFiles(fullPath)) {
+      if (isFile(fullPath)) {
         const data = fs.readFileSync(fullPath, "utf-8");
         searchText(data, fileSearchText);
       } else {
