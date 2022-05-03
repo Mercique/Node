@@ -4,8 +4,11 @@
   "description": "Node.js course",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js",
+    "cli": "node lesson4/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "reader": "lesson4/cli.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,8 @@
   },
   "homepage": "https://github.com/Mercique/Node#readme",
   "dependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "inquirer": "^8.2.2",
+    "yargs": "^17.4.0"
   }
 }
