@@ -49,7 +49,7 @@ io.on("connection", (client) => {
     chatUsers = chatUsers.filter((item) => item !== name);
     client.broadcast.emit('out_user', chatUsers);
     client.emit('out_user', chatUsers);
-    console.log(colors.red(`${name} disconnect!`));
+    console.log(colors.blue(`${name} disconnect!`));
   });
 });
 
