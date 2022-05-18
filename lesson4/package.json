@@ -1,17 +1,20 @@
 {
-  "name": "lesson6",
+  "name": "lesson4",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "cli": "node cli.js"
+  },
+  "bin": {
+    "reader": "cli.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
-    "nodemon": "^2.0.16",
-    "socket.io": "^4.5.1"
+    "inquirer": "^8.2.4",
+    "yargs": "^17.5.1"
   }
 }
