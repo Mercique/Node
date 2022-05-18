@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket chat</title>
+    <script
+      src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+      integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="chat">
+      <div class="chat__users">
+        <h2 class="chat__users-title">Users</h2>
+        <div id="user"></div>
+      </div>
+      <div class="chat__messages">
+        <h2 class="chat__messages-title">Messages</h2>
+        <div id="messages"></div>
+        <input id="messages-input" type="text" autofocus />
+        <button id="messages-btn">Send</button>
+      </div>
+    </div>
+
+    <script>
+      const socket = io("localhost:5555");
+
+      const userBlock = document.querySelector("#user");
+      const messagesBlock = document.querySelector("#messages");
+      const input = document.querySelector("#messages-input");
+      const button = document.querySelector("#messages-btn");
+
+      socket.on("connect", () => {
+        console.log("Connect");
+      });
+
+      socket.io.on('reconnect', () => {
+        socket.emit('reconnect_user');
+      });
+
+      const addUsersBlock = (users) => {
+        userBlock.innerHTML = "";
+
+        users.map((user) => {
+          userBlock.innerHTML += `<div>${user}</div>`;
+        });
+      };
+
+      socket.on("new_user", (listUsers) => {
+        addUsersBlock(listUsers);
+      });
+
+      socket.on("out_user", (listUsers) => {
+        addUsersBlock(listUsers);
+      });
+
+      socket.on("re_user", (listUsers) => {
+        addUsersBlock(listUsers);
+      });
+
+      socket.on("message", (listMessages) => {
+        messagesBlock.innerHTML = "";
+
+        listMessages.map((el) => {
+          messagesBlock.innerHTML += `<div>${el.name}: ${el.msg}</div>`;
+        });
+      });
+
+      button.addEventListener("click", () => {
+        const message = {
+          text: input.value,
+        };
+
+        socket.emit("add_message", message);
+        input.value = "";
+      });
+    </script>
+  </body>
+</html>
